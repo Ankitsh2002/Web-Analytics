@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container">
+    <section class="my-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5">Crafting Digital Experiences</h2>
+                <p class="lead">I create beautiful, functional websites that help businesses grow.</p>
+                <a href="/contact" class="btn btn-primary btn-lg">Get Started</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                     alt="Web Development" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </section>
+
+    <section class="my-5 py-4">
+        <h2 class="text-center mb-4">Featured Work</h2>
+        <div class="row">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         class="card-img-top" alt="Project 1">
+                    <div class="card-body">
+                        <h5 class="card-title">E-commerce Website</h5>
+                        <p class="card-text">Modern online store with secure checkout.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         class="card-img-top" alt="Project 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Business Dashboard</h5>
+                        <p class="card-text">Analytics dashboard for business metrics.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         class="card-img-top" alt="Project 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mobile App</h5>
+                        <p class="card-text">Cross-platform mobile application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="my-5 py-4 bg-light rounded">
+        <div class="container">
+            <h2 class="text-center mb-4">What Clients Say</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" 
+                                 class="rounded-circle mb-3" width="80" alt="Client 1">
+                            <p class="card-text">"Great work! Delivered exactly what we needed."</p>
+                            <p class="text-muted">- Sarah Johnson, CEO</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" 
+                                 class="rounded-circle mb-3" width="80" alt="Client 2">
+                            <p class="card-text">"Professional and timely delivery. Highly recommend!"</p>
+                            <p class="text-muted">- Michael Chen, Director</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                                 class="rounded-circle mb-3" width="80" alt="Client 3">
+                            <p class="card-text">"Transformed our online presence completely."</p>
+                            <p class="text-muted">- Emily Wilson, Marketing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keep existing lead generation popup -->
+    <div id="leadGenPopup" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>Get My Free SEO Tips!</h2>
+            <p>Sign up to receive a free guide on boosting your website’s SEO.</p>
+            <form id="leadGenForm">
+                <div class="mb-3">
+                    <label for="leadName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="leadName" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="leadEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="leadEmail" name="email" required>
+                </div>
+                <button type="submit" class="btn btn-success">Sign Up</button>
+            </form>
+            <div id="leadGenMessage" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- Add JavaScript for popup functionality -->
+    <script>
+        // Popup control
+        const popup = document.getElementById('leadGenPopup');
+        const closeBtn = document.querySelector('.close');
+        
+        // Show popup after 2 seconds (example trigger)
+        setTimeout(() => {
+            popup.style.display = 'block';
+        }, 2000);
+
+        // Close popup when clicking the X
+        closeBtn.onclick = () => {
+            popup.style.display = 'none';
+        }
+
+        // Handle form submission with AJAX
+        document.getElementById('leadGenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/lead-gen', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('leadGenMessage').innerHTML = data.message;
+                this.reset();
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('leadGenMessage').innerHTML = 'An error occurred. Please try again.';
+            });
+        });
+    </script>
+{% endblock %}
